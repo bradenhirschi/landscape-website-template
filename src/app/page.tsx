@@ -1,76 +1,56 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Globe, ShoppingCart, Trophy } from "lucide-react";
 import ServiceCard from "./components/service-card";
-import TestimonialCarousel from "./components/testimonial-carousel";
+import TestimonialCarousel from "./components/review-carousel";
+import { createSupabaseClient } from "@/lib/supabase";
+import Navbar from "./components/navbar";
 
-export default function LandscapingLandingPage() {
+export default async function LandscapingLandingPage() {
+  const supabase = createSupabaseClient();
+
+  const { data: pageContent, error: pageContentError } = await supabase
+    .from("home_pages")
+    .select()
+    .eq("site_id", process.env.SITE_ID!)
+    .single();
+
+  if (pageContentError) console.error(pageContentError);
+
+  if (!pageContent) return <></>;
+
   return (
     <div className="min-h-screen bg-stone-900 text-white">
-      <div className="relative bg-cover bg-[url(https://cdn.prod.website-files.com/66695921e784b293b5398f0c%2F66714544668cb09ad9c0b99a_6014805_Flower_Garden_1280x720-poster-00001.jpg)]">
-        <div className="absolute inset-0 bg-black/30 pointer-events-none" />
-        {/* Navigation */}
-        <nav className="flex justify-between items-center p-4">
-          <img
-            className="h-auto w-28"
-            src="https://cdn.prod.website-files.com/66eaf0d87d8ac57ad8310276/66eaf0d87d8ac57ad83103b3_Logo.webp"
-          />
-          <div className="space-x-8 text-lg font-semibold italic">
-            <Link href="#" className="hover:text-emerald-400">
-              Demos
-            </Link>
-            <Link href="#" className="hover:text-emerald-400">
-              About Us
-            </Link>
-            <Link href="#" className="hover:text-emerald-400">
-              Services
-            </Link>
-            <Link href="#" className="hover:text-emerald-400">
-              Projects
-            </Link>
-            <Link href="#" className="hover:text-emerald-400">
-              `` Contact
-            </Link>
-          </div>
-          <div className="flex flex-row items-center gap-4">
-            <ShoppingCart />
-            <Button className="bg-[#497f64]">GET STARTED</Button>
-          </div>
-        </nav>
+      <div className="relative bg-[url(https://cdn.prod.website-files.com/66695921e784b293b5398f0c%2F66714544668cb09ad9c0b99a_6014805_Flower_Garden_1280x720-poster-00001.jpg)] bg-cover">
+        <div className="pointer-events-none absolute inset-0 bg-black/30" />
+
+        <Navbar />
 
         {/* Hero Section */}
-        <section className=" h-[70vh] flex items-center justify-center">
+        <section className="flex h-[70vh] items-center justify-center">
           <div className="z-10 text-center">
-            <h1 className="text-8xl italic font-bold mb-4">ABOUT US</h1>
-            <p className="text-2xl font-light max-w-2xl mx-auto">
-              Whether you’re a seasoned gardener or just beginning your journey
-              into the world of landscaping, we are here to support and inspire
-              you every step of the way.
+            <h1 className="mb-4 text-8xl font-bold uppercase italic">
+              {pageContent.hero_text}
+            </h1>
+            <p className="mx-auto max-w-2xl text-2xl font-light">
+              {pageContent.hero_subtext}
             </p>
           </div>
         </section>
       </div>
 
       {/* We Create Awesome Landscape Section */}
-      <section className="py-32 px-8">
+      <section className="px-8 py-32">
         <div className="flex flex-row">
-          <h1 className="italic text-left">WE CREATE AWESOME LANDSCAPES</h1>
+          <h1 className="text-left uppercase italic">
+            {pageContent.feature_text}
+          </h1>
           <div className="flex flex-grow" />
-          <h5 className="max-w-[50%]">
-            We specialize in transforming ordinary spaces into extraordinary
-            landscapes that captivate the senses and enrich the environment.
-          </h5>
+          <h5 className="max-w-[50%]">{pageContent.feature_subtext}</h5>
         </div>
 
-        <div className="mt-16 grid md:grid-cols-3 gap-8 h-96">
+        <div className="mt-16 grid h-96 gap-8 md:grid-cols-3">
           <div className="relative">
             <Image
               src="https://images.pexels.com/photos/28216688/pexels-photo-28216688/free-photo-of-autumn-camping.png"
@@ -84,203 +64,105 @@ export default function LandscapingLandingPage() {
               src="https://images.pexels.com/photos/28216688/pexels-photo-28216688/free-photo-of-autumn-camping.png"
               alt="Landscaping Work"
               fill
-              className="md:col-span-2 rounded-[3rem]"
+              className="rounded-[3rem] md:col-span-2"
             />
           </div>
         </div>
       </section>
 
-      {/* Our Values Section */}
-      <section className="grid grid-cols-3">
-        <div className="p-20 flex flex-col bg-stone-800">
-          <h1 className="italic mb-12">OUR VALUES</h1>
-          <ul className="text-xl list-disc mb-8">
-            <li>
-              We source only the best products to ensure your garden thrives.
-            </li>
-            <li>
-              We are committed to eco-friendly practices and products that
-              promote sustainable gardening.
-            </li>
-            <li>
-              Our knowledgeable staff is passionate about gardening and
-              landscaping.
-            </li>
-          </ul>
-          <Button className="bg-white text-black">View More</Button>
-        </div>
-        <div className="h-full w-full bg-[url(https://images.pexels.com/photos/28216688/pexels-photo-28216688/free-photo-of-autumn-camping.png)]" />
-        <div className="p-20 flex flex-col bg-emerald-50 text-black">
-          <h2 className="italic mb-4">Our advance skills.</h2>
-          <p className="italic text-lg mb-8">
-            We believe that everyone deserves to enjoy the benefits of a
-            well-designed outdoor space, and we are dedicated to making that
-            vision a reality for you.
-          </p>
-          <ul className="flex flex-col gap-8">
-            <li className="italic text-lg border-b-4 border-emerald-700">
-              Expertise
-            </li>
-            <li className="italic text-lg border-b-4 border-emerald-700">
-              Sustainability
-            </li>
-            <li className="italic text-lg border-b-4 border-emerald-700">
-              Quality
-            </li>
-          </ul>
-        </div>
-      </section>
-
       {/* Why Trust Us Section */}
-      <section className="py-16 px-4 bg-emerald-50">
-        <div className="flex flex-row items-end mb-12">
-          <h1 className="text-black italic uppercase">
-            Why trust us with your
-            <br />
-            landscape?
+      <section className="bg-emerald-50 px-4 py-16">
+        <div className="mb-12 flex flex-row items-end">
+          <h1 className="uppercase italic text-black">
+            {pageContent.services_text}
           </h1>
           <div className="flex-grow" />
-          <Button>Start a partnership</Button>
+          <Button>{pageContent.cta_button_text}</Button>
         </div>
 
-        <div className="relative grid grid-rows-2 md:grid-rows-1 md:grid-cols-3 md:col-gap-[70px] bg-emerald-50 p-8">
+        <div className="md:col-gap-[70px] relative grid grid-rows-2 bg-emerald-50 p-8 md:grid-cols-3 md:grid-rows-1">
           <div className="relative mb-8 md:mb-0">
             <Image
               src="https://images.pexels.com/photos/28216688/pexels-photo-28216688/free-photo-of-autumn-camping.png"
               alt="Autumn camping landscape"
               fill
-              className="rounded-[3rem] object-cover w-full h-full"
+              className="h-full w-full rounded-[3rem] object-cover"
             />
           </div>
-          <div className="col-span-2 grid grid-cols-2 md:pl-8 gap-8">
+          <div className="col-span-2 grid grid-cols-2 gap-8 md:pl-8">
             <ServiceCard
-              icon={<Globe className="w-10 h-10 text-white" />}
+              icon={<Globe className="h-10 w-10 text-white" />}
               title="Expertise and Experience"
               description="With years of experience in landscaping and gardening, our skilled team is equipped to handle projects of any size and complexity."
             />
             <ServiceCard
-              icon={<Trophy className="w-10 h-10 text-white" />}
+              icon={<Trophy className="h-10 w-10 text-white" />}
               title="Commercial Landscaping"
               description="Our services include landscape design, installation, and maintenance for office buildings, hotels, shopping centers, and more."
             />
             <ServiceCard
-              icon={<Globe className="w-10 h-10 text-white" />}
+              icon={<Globe className="h-10 w-10 text-white" />}
               title="Urban and Public Spaces"
               description="We work with planners and community groups to create and maintain urban emerald spaces, promoting wellness and sustainability."
             />
             <ServiceCard
-              icon={<Trophy className="w-10 h-10 text-white" />}
+              icon={<Trophy className="h-10 w-10 text-white" />}
               title="Custom Garden Designs"
               description="Every landscape has its own story. We offer bespoke garden design services tailored to your unique preferences and requirements."
             />
           </div>
         </div>
-
-        {/* Grass image */}
-        {/* <div className="absolute bottom-0 inset-0 w-full h-[40rem]">
-          <div className="relative h-full w-full">
-            <Image
-              alt="grass"
-              fill
-              src="https://cdn.prod.website-files.com/66eaf0d87d8ac57ad8310276/66eaf0d87d8ac57ad83103a9_986ce11201d59228b44fcde7c2348bc5.webp"
-            />
-          </div>
-        </div> */}
-      </section>
-
-      {/* Trusted by Clients Section */}
-      <section className="py-32 px-4 bg-emerald-50 text-black flex flex-col items-center ">
-        <h1 className="italic mb-8 text-center">TRUSTED BY CLIENTS</h1>
-        <p className="text-center max-w-[800px] text-2xl font-extralight mb-20">
-          We are honored to serve a diverse array of clients who share our
-          passion for creating beautiful, and sustainable outdoor spaces.
-        </p>
-        <div className="grid grid-cols-6 justify-center space-x-8">
-          {[1, 2, 3, 4, 5, 6].map((index) => (
-            <div
-              key={index}
-              className="w-36 h-36 bg-lime-300/50 rounded-full"
-            ></div>
-          ))}
-        </div>
       </section>
 
       {/* Testimonial Carousel Section */}
-      <section className="w-full flex flex-col items-center py-32 bg-stone-900">
+      <section className="flex w-full flex-col items-center bg-stone-900 py-32">
         <TestimonialCarousel />
       </section>
 
       {/* Call to Action Section */}
-      <section className="p-8 bg-stone-900">
-        <div className="flex flex-col py-36 px-24 gap-8 rounded-[3rem] bg-[url(https://cdn.prod.website-files.com/66695921e784b293b5398f0c%2F66714544668cb09ad9c0b99a_6014805_Flower_Garden_1280x720-poster-00001.jpg)]">
+      <section className="bg-stone-900 p-8">
+        <div className="flex flex-col gap-8 rounded-[3rem] bg-[url(https://cdn.prod.website-files.com/66695921e784b293b5398f0c%2F66714544668cb09ad9c0b99a_6014805_Flower_Garden_1280x720-poster-00001.jpg)] px-24 py-36">
           <div className="flex flex-row">
-            <h1 className="italic uppercase mb-4">
-              MAKE YOUR DREAM GARDEN INTO REALITY
-            </h1>
+            <h1 className="mb-4 uppercase italic">{pageContent.cta_text}</h1>
             <div className="flex-grow" />
-            <p className="text-2xl font-light mb-8">
-              Transform your outdoor space into something special. Contact us
-              today for a free consultation!
+            <p className="mb-8 text-2xl font-light">
+              {pageContent.cta_subtext}
             </p>
           </div>
           <div className="flex items-start">
-            <Button variant={"secondary"}>Start a partnership</Button>
+            <Button variant={"secondary"}>{pageContent.cta_button_text}</Button>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-stone-900 pt-32 pb-8 px-8">
-        <div className="mx-auto grid grid-cols-3 md:grid-cols-6 gap-8">
+      <footer className="bg-stone-900 px-8 pb-8 pt-32">
+        <div className="mx-auto grid grid-cols-3 gap-8 md:grid-cols-6">
           <div className="col-span-3">
-            <h1 className="italic mb-4 uppercase">
-              We would love to hear from you.
+            <h1 className="mb-4 uppercase italic">
+              {pageContent.contact_us_text}
             </h1>
-            <p className="text-xl font-light mb-12">
-              Feel free to reach our if you want to collaborate with us, or
-              simply have a chat
+            <p className="mb-12 text-xl font-light">
+              {pageContent.contact_us_subtext}
             </p>
-            <Button className="bg-emerald-700">Become a client</Button>
+            <Button className="bg-emerald-700">
+              {pageContent.cta_button_text}
+            </Button>
           </div>
           <div>
-            <h3 className="text-xl font-bold mb-4">CONTACT US</h3>
-            <p>123 Garden Street, emerald City, 12345</p>
-            <p>Phone: (123) 456-7890</p>
-            <p>Email: info@landscaping.com</p>
+            <h3 className="mb-4 text-xl font-bold">
+              {pageContent.contact_us_text}
+            </h3>
+            <p>{pageContent.contact_address}</p>
           </div>
           <div>
-            <h3 className="text-xl font-bold mb-4">FOLLOW US</h3>
-            <div className="flex space-x-4">
-              {["Facebook", "Twitter", "Instagram", "LinkedIn"].map(
-                (social) => (
-                  <Link
-                    key={social}
-                    href="#"
-                    className="hover:text-emerald-400"
-                  >
-                    {social}
-                  </Link>
-                )
-              )}
-            </div>
+            <h3 className="mb-4 text-xl font-bold">Phone</h3>
+            <p>{pageContent.contact_phone}</p>
           </div>
           <div>
-            <h3 className="text-xl font-bold mb-4">QUICK LINKS</h3>
-            <ul className="space-y-2">
-              {["Home", "About", "Services", "Projects", "Contact"].map(
-                (link) => (
-                  <li key={link}>
-                    <Link href="#" className="hover:text-emerald-400">
-                      {link}
-                    </Link>
-                  </li>
-                )
-              )}
-            </ul>
+            <h3 className="mb-4 text-xl font-bold">Email</h3>
+            <p>{pageContent.contact_email}</p>
           </div>
-        </div>
-        <div className="mt-8 text-center text-sm">
-          <p>&copy; 2023 Landscaping Company. All rights reserved.</p>
         </div>
       </footer>
     </div>
