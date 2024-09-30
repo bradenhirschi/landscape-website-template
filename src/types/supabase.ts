@@ -128,16 +128,19 @@ export type Database = {
           created_at: string;
           site_id: string;
           user_id: string;
+          business_name: string;
         };
         Insert: {
           created_at?: string;
           site_id?: string;
           user_id?: string;
+          business_name?: string;
         };
         Update: {
           created_at?: string;
           site_id?: string;
           user_id?: string;
+          business_name?: string;
         };
         Relationships: [
           {

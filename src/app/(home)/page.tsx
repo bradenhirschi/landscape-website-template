@@ -1,11 +1,11 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Globe, ShoppingCart, Trophy } from "lucide-react";
-import ServiceCard from "./components/service-card";
-import TestimonialCarousel from "./components/review-carousel";
+import { Globe, Trophy } from "lucide-react";
+import ServiceCard from "../components/service-card";
+import TestimonialCarousel from "../components/review-carousel";
 import { createSupabaseClient } from "@/lib/supabase";
-import Navbar from "./components/navbar";
+import CtaButton from "../components/cta-button";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 export default async function LandscapingLandingPage() {
   const supabase = createSupabaseClient();
@@ -21,24 +21,99 @@ export default async function LandscapingLandingPage() {
   if (!pageContent) return <></>;
 
   return (
-    <div className="min-h-screen bg-stone-900 text-white">
-      <div className="relative bg-[url(https://cdn.prod.website-files.com/66695921e784b293b5398f0c%2F66714544668cb09ad9c0b99a_6014805_Flower_Garden_1280x720-poster-00001.jpg)] bg-cover">
-        <div className="pointer-events-none absolute inset-0 bg-black/30" />
+    <main className="bg-stone-900 text-white">
+      {/* Hero Section */}
+      <section className="mx-4 mb-24 grid grid-cols-2 gap-36 pt-36">
+        <div className="flex items-center space-x-4">
+          <h1 className="text-8xl font-bold uppercase italic">
+            {pageContent.hero_text}
+          </h1>
+        </div>
 
-        <Navbar />
+        <div className="flex flex-col gap-4">
+          <Card className="w-full rounded-xl p-4">
+            <CardContent>
+              <h2 className="mb-2 font-bold text-primary">1700+</h2>
+              <p className="font-semibold">Projects Completed</p>
+            </CardContent>
+            <CardFooter>
+              <CtaButton variant="secondary" />
+            </CardFooter>
+          </Card>
 
-        {/* Hero Section */}
-        <section className="flex h-[70vh] items-center justify-center">
-          <div className="z-10 text-center">
-            <h1 className="mb-4 text-8xl font-bold uppercase italic">
-              {pageContent.hero_text}
-            </h1>
-            <p className="mx-auto max-w-2xl text-2xl font-light">
-              {pageContent.hero_subtext}
+          {/* Tagline */}
+          <p className="max-w-2xl text-xl">{pageContent.hero_subtext}</p>
+        </div>
+      </section>
+
+      {/* Card grid section */}
+      <section className="mx-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {/* Card 1 */}
+        <Card className="overflow-hidden rounded-3xl bg-primary text-white">
+          <CardContent className="p-6">
+            <h3 className="mb-4 text-2xl font-bold">
+              100% eco-friendly practices
+            </h3>
+            <p className="mb-4">
+              Let us help you turn your vision into reality and create a
+              landscape that you'll love for years to come.
             </p>
-          </div>
-        </section>
-      </div>
+            <Button
+              variant="outline"
+              className="border-white text-white hover:bg-primary"
+            >
+              Explore Project →
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Card 2 */}
+        <Card
+          className="relative overflow-hidden rounded-3xl bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/placeholder.svg?height=400&width=300')",
+          }}
+        >
+          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+          <CardContent className="relative flex h-full flex-col justify-end p-6 text-white">
+            <h2 className="mb-2 text-6xl font-bold">602+</h2>
+            <h3 className="mb-4 text-2xl font-bold">PROJECTS COMPLETED</h3>
+            <p>
+              Whether you're looking for a simple garden makeover or a complete
+              landscape transformation, we are here.
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Card 3 */}
+        <Card className="overflow-hidden rounded-3xl bg-primary text-primary-foreground">
+          <CardContent className="p-6">
+            <h3 className="mb-4 text-3xl font-bold">Get in Touch</h3>
+            <p className="mb-4">
+              Ready to transform your outdoor space? Contact us today to
+              schedule a consultation and start your journey towards a beautiful
+            </p>
+            <Button className="bg-primary text-white hover:bg-primary">
+              Contact Us →
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Card 4 */}
+        <Card
+          className="relative overflow-hidden rounded-3xl bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/placeholder.svg?height=400&width=300')",
+          }}
+        >
+          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+          <CardContent className="relative flex h-full flex-col justify-end p-6 text-white">
+            <div className="mb-4 h-16 w-16 rounded-full bg-primary"></div>
+            <h2 className="mb-2 text-6xl font-bold">10+</h2>
+            <h3 className="text-2xl font-bold">YEARS OF EXPERIENCE</h3>
+          </CardContent>
+        </Card>
+      </section>
 
       {/* We Create Awesome Landscape Section */}
       <section className="px-8 py-32">
@@ -77,7 +152,7 @@ export default async function LandscapingLandingPage() {
             {pageContent.services_text}
           </h1>
           <div className="flex-grow" />
-          <Button>{pageContent.cta_button_text}</Button>
+          <CtaButton />
         </div>
 
         <div className="md:col-gap-[70px] relative grid grid-rows-2 bg-emerald-50 p-8 md:grid-cols-3 md:grid-rows-1">
@@ -130,41 +205,10 @@ export default async function LandscapingLandingPage() {
             </p>
           </div>
           <div className="flex items-start">
-            <Button variant={"secondary"}>{pageContent.cta_button_text}</Button>
+            <CtaButton variant="secondary" />
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-stone-900 px-8 pb-8 pt-32">
-        <div className="mx-auto grid grid-cols-3 gap-8 md:grid-cols-6">
-          <div className="col-span-3">
-            <h1 className="mb-4 uppercase italic">
-              {pageContent.contact_us_text}
-            </h1>
-            <p className="mb-12 text-xl font-light">
-              {pageContent.contact_us_subtext}
-            </p>
-            <Button className="bg-emerald-700">
-              {pageContent.cta_button_text}
-            </Button>
-          </div>
-          <div>
-            <h3 className="mb-4 text-xl font-bold">
-              {pageContent.contact_us_text}
-            </h3>
-            <p>{pageContent.contact_address}</p>
-          </div>
-          <div>
-            <h3 className="mb-4 text-xl font-bold">Phone</h3>
-            <p>{pageContent.contact_phone}</p>
-          </div>
-          <div>
-            <h3 className="mb-4 text-xl font-bold">Email</h3>
-            <p>{pageContent.contact_email}</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </main>
   );
 }
